@@ -64,8 +64,19 @@ ifeq ($(shell uname -p),powerpc)
    arch = ppc
 endif
 
+# PS5 (a homebrew title's libretro core): the console's libraries resolve at
+# load time, so no --no-undefined; no LTO; zstd without its trace hooks, which
+# are weak imports nothing on the console defines.
+ifeq ($(platform), ps5)
+   TARGET := $(TARGET_NAME)_libretro.so
+   fpic := -fPIC
+   SHARED := -shared -Wl,--version-script=link.T
+   LDFLAGS += $(PTHREAD_FLAGS)
+   FLAGS += $(PTHREAD_FLAGS) -DZSTD_TRACE=0
+   LTO = 0
+
 # Unix
-ifneq (,$(findstring unix,$(platform)))
+else ifneq (,$(findstring unix,$(platform)))
    TARGET := $(TARGET_NAME)_libretro.so
    fpic := -fPIC
    SHARED := -shared -Wl,--no-undefined -Wl,--version-script=link.T
