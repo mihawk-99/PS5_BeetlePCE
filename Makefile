@@ -72,7 +72,7 @@ ifeq ($(platform), ps5)
    fpic := -fPIC
    SHARED := -shared -Wl,--version-script=link.T
    LDFLAGS += $(PTHREAD_FLAGS)
-   FLAGS += $(PTHREAD_FLAGS) -DZSTD_TRACE=0
+   FLAGS += $(PTHREAD_FLAGS) -DZSTD_TRACE=0 -DUSE_LIBRETRO_VFS
    LTO = 0
 
 # Unix
